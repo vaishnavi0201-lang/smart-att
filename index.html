@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Embedded styles.css */
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --sidebar-width: 260px;
+            --topbar-height: 70px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Authentication Page Styles */
+        .auth-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .auth-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .auth-card h2 {
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .auth-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+        }
+
+        .form-group select option {
+            background: #764ba2;
+            color: #ffffff;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.75rem;
+            background: #ffffff;
+            color: #764ba2;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            background: #f8fafc;
+        }
+
+        /* Layout Styles */
+        .dashboard-layout {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-links {
+            padding: 1.5rem 0.75rem;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            border-radius: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #f1f5f9;
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: #ffffff;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: var(--topbar-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .content-body {
+            padding: 2rem;
+        }
+
+        /* Dashboards & Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .mt-1 {
+            margin-top: 1rem;
+        }
+
+        .mt-2 {
+            margin-top: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+
+        .status-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pill.success {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pill.danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* Profile */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-avatar.large {
+            width: 80px;
+            height: 80px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--text-muted);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-item label {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Scanner Mock */
+        .scanner-mock {
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .scanner-frame,
+        .face-frame {
+            width: 280px;
+            height: 280px;
+            border: 4px solid var(--primary-color);
+            margin: 2rem auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .scanner-line {
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            top: 50%;
+            animation: scan 2s linear infinite;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .btn-primary {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .form-group-dark label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .form-group-dark select,
+        .form-group-dark input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .view-section {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Login View -->
+        <div id="view-login" class="view-section">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="logo" style="justify-content: center; margin-bottom: 1.5rem; color: #fff;">
+                        <i class="fas fa-user-check"></i>
+                        <span>SmartAttend</span>
+                    </div>
+                    <h2>Welcome Back</h2>
+                    <p>Login to your account to continue</p>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select id="login-role" required>
+                                <option value="student">Student</option>
+                                <option value="staff">Staff</option>
+                                <option value="hod">HOD</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="login-email" placeholder="email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn-login">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Layout -->
+        <div id="dashboard-layout" class="dashboard-layout" style="display: none;">
+            <div id="sidebar-container"></div>
+            <main class="main-content">
+                <div id="topbar-container"></div>
+
+                <!-- View: Student Dashboard -->
+                <div id="view-student_dashboard" class="view-section content-body" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #e0e7ff; color: #4338ca;"><i
+                                    class="fas fa-percent"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-attendance">85%</h3>
+                                <p>Total Attendance</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #fef3c7; color: #b45309;"><i
+                                    class="fas fa-book"></i></div>
+                            <div class="stat-info">
+                                <h3>5</h3>
+                                <p>Active Subjects</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #dcfce7; color: #15803d;"><i
+                                    class="fas fa-user-clock"></i></div>
+                            <div class="stat-info">
+                                <h3>Today</h3>
+                                <p>Last Entry</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <h3>Attendance Summary</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Total</th>
+                                        <th>Attended</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-body">
+                                    <!-- Dynamic data -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Staff Dashboard -->
+                <div id="view-staff_dashboard" class="view-section content-body" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #e0e7ff; color: #4338ca;"><i
+                                    class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <h3>120</h3>
+                                <p>Total Students</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #fef3c7; color: #b45309;"><i
+                                    class="fas fa-chalkboard"></i></div>
+                            <div class="stat-info">
+                                <h3>5</h3>
+                                <p>Classes Today</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #dcfce7; color: #15803d;"><i
+                                    class="fas fa-chart-line"></i></div>
+                            <div class="stat-info">
+                                <h3>92%</h3>
+                                <p>Avg Attendance</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <h3>Assigned Students</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Roll No</th>
+                                        <th>Name</th>
+                                        <th>Dept</th>
+                                        <th>Attendance</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>S001</td>
+                                        <td>Alice Johnson</td>
+                                        <td>CS</td>
+                                        <td>85%</td>
+                                        <td><button class="btn-primary"
+                                                style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>S002</td>
+                                        <td>Bob Smith</td>
+                                        <td>CS</td>
+                                        <td>72%</td>
+                                        <td><button class="btn-primary"
+                                                style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Details</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: HOD Dashboard -->
+                <div id="view-hod_dashboard" class="view-section content-body" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>24</h3>
+                            <p>Total Staff</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>1,200</h3>
+                            <p>Total Students</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>85%</h3>
+                            <p>Dept Avg</p>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <h3>Staff Monitoring</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Staff Name</th>
+                                        <th>Subject</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Dr. Robert Smith</td>
+                                        <td>Machine Learning</td>
+                                        <td><span class="status-pill success">Ongoing</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prof. Jane Doe</td>
+                                        <td>Data Structures</td>
+                                        <td><span class="status-pill danger">Ended</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Admin Dashboard -->
+                <div id="view-admin_dashboard" class="view-section content-body" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>450</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>12</h3>
+                            <p>Systems Active</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>100%</h3>
+                            <p>Uptime</p>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <h3>System Activity Logs</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Log</th>
+                                        <th>User</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>New Student Registered</td>
+                                        <td>Admin</td>
+                                        <td>5 mins ago</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Staff Assigned to Subject</td>
+                                        <td>Admin</td>
+                                        <td>1 hour ago</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Profile -->
+                <div id="view-profile" class="view-section content-body" style="display: none;">
+                    <div class="card profile-card" style="max-width: 600px; margin: 0 auto;">
+                        <div class="profile-header">
+                            <div class="profile-avatar large"><i class="fas fa-user"></i></div>
+                            <div class="profile-info">
+                                <h2 id="prof-name">User Name</h2>
+                                <p id="prof-role">Role | ID: #000</p>
+                            </div>
+                        </div>
+                        <div class="profile-details mt-2">
+                            <div class="detail-item"><label>Email</label><span id="prof-email">email@example.com</span>
+                            </div>
+                            <div class="detail-item"><label>Department</label><span id="prof-dept">CS</span></div>
+                            <div class="detail-item"><label>Account Status</label><span
+                                    class="status-pill success">Active</span></div>
+                        </div>
+                        <button class="btn-primary mt-2" onclick="alert('Profile Updated!')">Edit Profile</button>
+                    </div>
+                </div>
+
+                <!-- View: Student Scanner -->
+                <div id="view-student_scanner" class="view-section content-body" style="display: none;">
+                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                        <div class="card scanner-mock">
+                            <h3>QR Code Attendance</h3>
+                            <p>Align the QR code within the frame</p>
+                            <div class="scanner-frame">
+                                <div class="scanner-line"></div><i class="fas fa-qrcode fa-5x"
+                                    style="opacity: 0.3;"></i>
+                            </div>
+                            <button class="btn-primary mt-1" onclick="alert('Attendance Marked via QR!')">Simulate QR
+                                Scan</button>
+                        </div>
+                        <div class="card scanner-mock">
+                            <h3>Face Recognition</h3>
+                            <p>Position your face clearly</p>
+                            <div class="face-frame">
+                                <div class="face-overlay"></div><i class="fas fa-user fa-5x" style="opacity: 0.3;"></i>
+                            </div>
+                            <button class="btn-primary mt-1" onclick="alert('Face Verified!')">Simulate Face
+                                Scan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Staff Attendance -->
+                <div id="view-staff_attendance" class="view-section content-body" style="display: none;">
+                    <div class="stats-grid" style="grid-template-columns: 1fr 2fr;">
+                        <div class="card" style="text-align: center;">
+                            <h3>Generate QR</h3>
+                            <p>Show to students</p>
+                            <div class="qr-display mt-2"
+                                style="background: #fff; padding:1.5rem; display:inline-block; border: 1px solid var(--border-color); border-radius: 1rem;">
+                                <i class="fas fa-qrcode fa-8x"></i>
+                            </div>
+                            <div class="timer mt-1">Exp: <span style="color: #e11d48;">04:59</span></div>
+                            <button class="btn-primary mt-1" onclick="alert('New QR Generated!')">Refresh</button>
+                        </div>
+                        <div class="card">
+                            <h3>Manual Entry</h3>
+                            <div class="form-group-dark mt-1">
+                                <label>Date</label><input type="date" value="2026-01-29">
+                            </div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Select</th>
+                                            <th>Name</th>
+                                            <th>Roll No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox" checked></td>
+                                            <td>Alice Johnson</td>
+                                            <td>S001</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>Bob Smith</td>
+                                            <td>S002</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn-primary mt-1" onclick="alert('Attendance Saved!')">Submit</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Admin Management -->
+                <div id="view-admin_management" class="view-section content-body" style="display: none;">
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3>Manage Students & Staff</h3>
+                            <button class="btn-primary">+ Add New User</button>
+                        </div>
+                        <div class="table-container mt-1">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Dept</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>S001</td>
+                                        <td>Alice Johnson</td>
+                                        <td>Student</td>
+                                        <td>CS</td>
+                                        <td><i class="fas fa-edit"></i> <i class="fas fa-trash"
+                                                style="color: #e11d48; margin-left: 1rem;"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>T001</td>
+                                        <td>Dr. Robert Smith</td>
+                                        <td>Staff</td>
+                                        <td>CS</td>
+                                        <td><i class="fas fa-edit"></i> <i class="fas fa-trash"
+                                                style="color: #e11d48; margin-left: 1rem;"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Data -->
+    <script>
+        const appData = {
+            users: [
+                { id: 'S001', role: 'student', name: 'Alice Johnson', email: 'alice@example.com', password: 'password123', dept: 'CS', year: '3rd', attendance: 85 },
+                { id: 'T001', role: 'staff', name: 'Dr. Robert Smith', email: 'robert@example.com', password: 'password123', dept: 'CS' },
+                { id: 'H001', role: 'hod', name: 'Dr. Sarah Wilson', email: 'sarah@example.com', password: 'password123', dept: 'CS' },
+                { id: 'A001', role: 'admin', name: 'System Admin', email: 'admin@example.com', password: 'password123' }
+            ],
+            subjects: [
+                { id: 101, name: 'Machine Learning', code: 'CS301', attendance: 90 },
+                { id: 102, name: 'Database Systems', code: 'CS302', attendance: 75 },
+                { id: 103, name: 'Web Dev', code: 'CS303', attendance: 92 }
+            ],
+            departments: ['CS', 'EE', 'ME', 'CE'],
+            attendanceRecords: []
+        };
+    </script>
+
+    <!-- SPA Logic -->
+    <script>
+        const App = {
+            currentUser: null,
+
+            init() {
+                // Check auth
+                const storedUser = localStorage.getItem('currentUser');
+
+                if (storedUser) {
+                    this.currentUser = JSON.parse(storedUser);
+                    console.log('Logged in as:', this.currentUser.role);
+                    this.navigateTo(`${this.currentUser.role}_dashboard`);
+                } else {
+                    this.showView('login');
+                }
+
+                this.bindLogin();
+                this.bindLogout();
+            },
+
+            bindLogin() {
+                const loginForm = document.getElementById('login-form');
+                if (!loginForm) return;
+
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const role = document.getElementById('login-role').value;
+                    const email = document.getElementById('login-email').value;
+
+                    // Open Login Logic
+                    let user = appData.users.find(u => u.email === email && u.role === role);
+
+                    if (!user) {
+                        user = {
+                            id: 'GUEST_' + Date.now(),
+                            role: role,
+                            name: email.split('@')[0],
+                            email: email,
+                            dept: 'CS',
+                            year: '1st',
+                            attendance: 0
+                        };
+                    }
+
+                    this.currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.navigateTo(`${role}_dashboard`);
+                });
+            },
+
+            bindLogout() {
+                // Delegated event for logout since sidebar is re-rendered
+                document.addEventListener('click', (e) => {
+                    const btn = e.target.closest('#logout-btn');
+                    if (btn) {
+                        e.preventDefault();
+                        this.logout();
+
+                    }
+                });
+            },
+
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('currentUser');
+
+                // Reset views
+                document.getElementById('dashboard-layout').style.display = 'none';
+                document.getElementById('view-login').style.display = 'block';
+
+                // Ensure specific dashboard views are hidden
+                document.querySelectorAll('.view-section.content-body').forEach(el => el.style.display = 'none');
+            },
+
+            navigateTo(viewId) {
+                // If it's a dashboard or internal page, make sure layout is visible
+                const isLogin = viewId === 'login';
+
+                if (isLogin) {
+                    this.showView('login');
+                    return;
+                }
+
+                // Show Layout
+                document.getElementById('dashboard-layout').style.display = 'flex';
+                document.getElementById('view-login').style.display = 'none';
+
+                // Show Sidebar
+                this.renderSidebar();
+
+                // Show specific Content View
+                this.showView(viewId, true);
+
+                // Update Topbar
+                this.renderTopbar(viewId);
+
+                // Run specific logic for the view
+                this.loadViewData(viewId);
+            },
+
+            showView(viewId, isContent = false) {
+                // Hide all top-level views if not content
+                if (!isContent) {
+                    document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
+                    const target = document.getElementById(`view-${viewId}`);
+                    if (target) target.style.display = 'block';
+                } else {
+                    // Hide all content views
+                    document.querySelectorAll('.view-section.content-body').forEach(el => el.style.display = 'none');
+                    const target = document.getElementById(`view-${viewId}`);
+                    if (target) {
+                        target.style.display = 'block';
+                    } else {
+                        console.error('View not found:', viewId);
+                    }
+                }
+            },
+
+            renderSidebar() {
+                const sidebarContainer = document.getElementById('sidebar-container');
+                if (!sidebarContainer || !this.currentUser) return;
+
+                const role = this.currentUser.role;
+                const navs = {
+                    student: [
+                        { id: 'student_dashboard', icon: 'fa-home', label: 'Dashboard' },
+                        { id: 'profile', icon: 'fa-user', label: 'My Profile' },
+                        { id: 'student_scanner', icon: 'fa-qrcode', label: 'Attendance Scan' }
+                    ],
+                    staff: [
+                        { id: 'staff_dashboard', icon: 'fa-home', label: 'Dashboard' },
+                        { id: 'profile', icon: 'fa-user', label: 'My Profile' },
+                        { id: 'staff_attendance', icon: 'fa-edit', label: 'Mark Attendance' }
+                    ],
+                    hod: [
+                        { id: 'hod_dashboard', icon: 'fa-home', label: 'Dashboard' },
+                        { id: 'profile', icon: 'fa-user', label: 'My Profile' }
+                    ],
+                    admin: [
+                        { id: 'admin_dashboard', icon: 'fa-home', label: 'Dashboard' },
+                        { id: 'admin_management', icon: 'fa-users', label: 'Manage Users' },
+                        { id: 'profile', icon: 'fa-user', label: 'My Profile' }
+                    ]
+                };
+
+                // Helper to determine active state (simple heuristic)
+                // In a real router, specific View ID would be tracked
+                const currentView = document.querySelector('.view-section.content-body[style*="block"]')?.id?.replace('view-', '');
+
+                sidebarContainer.innerHTML = `
+                    <aside class="sidebar">
+                        <div class="sidebar-header">
+                            <div class="logo">
+                                <i class="fas fa-user-check"></i>
+                                <span>SmartAttend</span>
+                            </div>
+                        </div>
+                        <nav class="nav-links">
+                            ${(navs[role] || []).map(item => `
+                                <li class="nav-item">
+                                    <a onclick="App.navigateTo('${item.id}')" class="nav-link">
+                                        <i class="fas ${item.icon}"></i>
+                                        <span>${item.label}</span>
+                                    </a>
+                                </li>
+                            `).join('')}
+                            <li class="nav-item" style="margin-top: auto;">
+                                <a href="#" class="nav-link" id="logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </nav>
+                    </aside>
+                `;
+            },
+
+            renderTopbar(viewId) {
+                const topbarContainer = document.getElementById('topbar-container');
+                if (!topbarContainer || !this.currentUser) return;
+
+                // Simple title mapping
+                const titles = {
+                    'student_dashboard': 'Student Dashboard',
+                    'staff_dashboard': 'Staff Dashboard',
+                    'hod_dashboard': 'HOD Dashboard',
+                    'admin_dashboard': 'Admin Dashboard',
+                    'profile': 'My Profile',
+                    'student_scanner': 'Attendance Scan',
+                    'staff_attendance': 'Mark Attendance',
+                    'admin_management': 'Manage Users'
+                };
+
+                const title = titles[viewId] || 'Dashboard';
+
+                topbarContainer.innerHTML = `
+                    <header class="topbar">
+                        <div class="topbar-left">
+                            <h3 id="view-title">${title}</h3>
+                        </div>
+                        <div class="topbar-right">
+                            <div class="user-profile">
+                                <span class="user-name">${this.currentUser.name}</span>
+                                <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                `;
+            },
+
+            loadViewData(viewId) {
+                if (viewId === 'student_dashboard') {
+                    const user = this.currentUser;
+                    if (user && user.attendance !== undefined) {
+                        const statEl = document.getElementById('stat-attendance');
+                        if (statEl) statEl.innerText = `${user.attendance}%`;
+
+                        const body = document.getElementById('attendance-body');
+                        if (body) {
+                            body.innerHTML = appData.subjects.map(s => `
+                                <tr>
+                                    <td>${s.name}</td>
+                                    <td>40</td>
+                                    <td>${Math.round(40 * (s.attendance / 100))}</td>
+                                    <td><span class="status-pill success">${s.attendance}%</span></td>
+                                </tr>
+                            `).join('');
+                        }
+                    }
+                } else if (viewId === 'profile') {
+                    const user = this.currentUser;
+                    if (user) {
+                        document.getElementById('prof-name').innerText = user.name;
+                        document.getElementById('prof-role').innerText = `${user.role.toUpperCase()} | ID: ${user.id}`;
+                        document.getElementById('prof-email').innerText = user.email;
+                        document.getElementById('prof-dept').innerText = user.dept || 'Admin';
+                    }
+                }
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance - User Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <div id="topbar-container"></div>
+        <div class="content-body">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Manage Students & Staff</h3>
+                    <button class="btn-primary">+ Add New User</button>
+                </div>
+                <div class="table-container mt-1">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Dept</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>Alice Johnson</td>
+                                <td>Student</td>
+                                <td>CS</td>
+                                <td><i class="fas fa-edit"></i> <i class="fas fa-trash"
+                                        style="color: #e11d48; margin-left: 1rem;"></i></td>
+                            </tr>
+                            <tr>
+                                <td>T001</td>
+                                <td>Dr. Robert Smith</td>
+                                <td>Staff</td>
+                                <td>CS</td>
+                                <td><i class="fas fa-edit"></i> <i class="fas fa-trash"
+                                        style="color: #e11d48; margin-left: 1rem;"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="common.js"></script>
+</body>
+
+</html>

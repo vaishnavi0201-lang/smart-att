@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance - My Profile</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <div id="topbar-container"></div>
+        <div class="content-body">
+            <div class="card profile-card" style="max-width: 600px; margin: 0 auto;">
+                <div class="profile-header">
+                    <div class="profile-avatar large"><i class="fas fa-user"></i></div>
+                    <div class="profile-info">
+                        <h2 id="prof-name">User Name</h2>
+                        <p id="prof-role">Role | ID: #000</p>
+                    </div>
+                </div>
+                <div class="profile-details mt-2">
+                    <div class="detail-item"><label>Email</label><span id="prof-email">email@example.com</span></div>
+                    <div class="detail-item"><label>Department</label><span id="prof-dept">CS</span></div>
+                    <div class="detail-item"><label>Account Status</label><span
+                            class="status-pill success">Active</span></div>
+                </div>
+                <button class="btn-primary mt-2" onclick="alert('Profile Updated!')">Edit Profile</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user) {
+                document.getElementById('prof-name').innerText = user.name;
+                document.getElementById('prof-role').innerText = `${user.role.toUpperCase()} | ID: ${user.id}`;
+                document.getElementById('prof-email').innerText = user.email;
+                document.getElementById('prof-dept').innerText = user.dept || 'Admin';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance - Attendance Scan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <div id="topbar-container"></div>
+        <div class="content-body">
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="card scanner-mock">
+                    <h3>QR Code Attendance</h3>
+                    <p>Align the QR code within the frame</p>
+                    <div class="scanner-frame">
+                        <div class="scanner-line"></div><i class="fas fa-qrcode fa-5x" style="opacity: 0.3;"></i>
+                    </div>
+                    <button class="btn-primary mt-1" onclick="alert('Attendance Marked via QR!')">Simulate QR
+                        Scan</button>
+                </div>
+                <div class="card scanner-mock">
+                    <h3>Face Recognition</h3>
+                    <p>Position your face clearly</p>
+                    <div class="face-frame">
+                        <div class="face-overlay"></div><i class="fas fa-user fa-5x" style="opacity: 0.3;"></i>
+                    </div>
+                    <button class="btn-primary mt-1" onclick="alert('Face Verified!')">Simulate Face Scan</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="common.js"></script>
+</body>
+
+</html>

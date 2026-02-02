@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance - Staff Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <div id="topbar-container"></div>
+        <div class="content-body">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e0e7ff; color: #4338ca;"><i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>120</h3>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fef3c7; color: #b45309;"><i
+                            class="fas fa-chalkboard"></i></div>
+                    <div class="stat-info">
+                        <h3>5</h3>
+                        <p>Classes Today</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #dcfce7; color: #15803d;"><i
+                            class="fas fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <h3>92%</h3>
+                        <p>Avg Attendance</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-2">
+                <h3>Assigned Students</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Name</th>
+                                <th>Dept</th>
+                                <th>Attendance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>Alice Johnson</td>
+                                <td>CS</td>
+                                <td>85%</td>
+                                <td><button class="btn-primary"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Details</button></td>
+                            </tr>
+                            <tr>
+                                <td>S002</td>
+                                <td>Bob Smith</td>
+                                <td>CS</td>
+                                <td>72%</td>
+                                <td><button class="btn-primary"
+                                        style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Details</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="common.js"></script>
+</body>
+
+</html>

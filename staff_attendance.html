@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance - Attendance Entry</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <div id="topbar-container"></div>
+        <div class="content-body">
+            <div class="stats-grid" style="grid-template-columns: 1fr 2fr;">
+                <div class="card" style="text-align: center;">
+                    <h3>Generate QR</h3>
+                    <p>Show to students</p>
+                    <div class="qr-display mt-2"
+                        style="background: #fff; padding:1.5rem; display:inline-block; border: 1px solid var(--border-color); border-radius: 1rem;">
+                        <i class="fas fa-qrcode fa-8x"></i>
+                    </div>
+                    <div class="timer mt-1">Exp: <span style="color: #e11d48;">04:59</span></div>
+                    <button class="btn-primary mt-1" onclick="alert('New QR Generated!')">Refresh</button>
+                </div>
+                <div class="card">
+                    <h3>Manual Entry</h3>
+                    <div class="form-group-dark mt-1">
+                        <label>Date</label><input type="date" value="2026-01-29">
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Name</th>
+                                    <th>Roll No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox" checked></td>
+                                    <td>Alice Johnson</td>
+                                    <td>S001</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>Bob Smith</td>
+                                    <td>S002</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn-primary mt-1" onclick="alert('Attendance Saved!')">Submit</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="common.js"></script>
+</body>
+
+</html>
